@@ -1,0 +1,6 @@
+name: ConfigInclude
+version: '${project.version}'
+main: com.github.metallnt.configinclude.ConfigInclude
+api-version: 1.16
+description: 'Пример реализации конфига'
+author: Metall
