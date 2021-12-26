@@ -1,6 +1,6 @@
-package com.github.metallnt.configinclude.configs;
+package com.github.metallnt.modact.configs;
 
-import com.github.metallnt.configinclude.ConfigInclude;
+import com.github.metallnt.modact.ModAct;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Class com.github.metallnt.configinclude.configs
+ * Class com.github.metallnt.modact.configs
  * <p>
  * Date: 19.12.2021 15:45 19 12 2021
  *
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 public class ConfigUpdater {
 
-    public static void update(ConfigInclude plugin, String resourceName, File toUpdate, List<String> ignoredSections) throws IOException {
+    public static void update(ModAct plugin, String resourceName, File toUpdate, List<String> ignoredSections) throws IOException {
         BufferedReader newReader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(plugin.getResource(resourceName)), StandardCharsets.UTF_8));
         List<String> newLines = newReader.lines().collect(Collectors.toList());
         newReader.close();

@@ -1,6 +1,6 @@
-package com.github.metallnt.configinclude.configs;
+package com.github.metallnt.modact.configs;
 
-import com.github.metallnt.configinclude.ConfigInclude;
+import com.github.metallnt.modact.ModAct;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.ConcurrentModificationException;
 
 /**
- * Class com.github.metallnt.configinclude.configs
+ * Class com.github.metallnt.modact.configs
  * <p>
  * Date: 19.12.2021 15:45 19 12 2021
  *
@@ -19,16 +19,16 @@ public class YamlConfig extends YamlConfiguration {
     File file;
 
     // Создаем новый файл YAML
-    public YamlConfig(final ConfigInclude configInclude, final String fileName, final String name) throws InvalidConfigurationException {
-        final String folderPath = configInclude.getDataFolder().getAbsolutePath() + File.separator;
+    public YamlConfig(final ModAct modAct, final String fileName, final String name) throws InvalidConfigurationException {
+        final String folderPath = modAct.getDataFolder().getAbsolutePath() + File.separator;
         file = new File(folderPath + fileName);
 
         // Если файл не существует
         if (!file.exists()) {
             // Если ресурс файла существует
-            if (configInclude.getResource(fileName) != null) {
+            if (modAct.getResource(fileName) != null) {
                 // Сохраняем конфиг из ресурсов (копированием)
-                configInclude.saveResource(fileName, false);
+                modAct.saveResource(fileName, false);
                 // И загружаем файл
                 try {
                     this.load(file);
@@ -55,7 +55,7 @@ public class YamlConfig extends YamlConfiguration {
     public void loadFile() {
         try {
             this.load(file);
-        } catch (final IOException | InvalidConfigurationException ignored) {
+        } catch (final InvalidConfigurationException | IOException ignored) {
 
         }
     }
@@ -65,7 +65,7 @@ public class YamlConfig extends YamlConfiguration {
         try {
             // Если файл пустой
             if (file == null) {
-                ConfigInclude.getInstance().getServer().getConsoleSender().sendMessage("Невозможно сохранить файл, т.к. он пустой");
+                ModAct.getInstance().getServer().getConsoleSender().sendMessage("Невозможно сохранить файл, т.к. он пустой");
                 return;
             }
             this.save(file);

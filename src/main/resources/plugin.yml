@@ -1,6 +1,6 @@
-name: ConfigInclude
+name: ModAct
 version: '${project.version}'
-main: com.github.metallnt.configinclude.ConfigInclude
+main: com.github.metallnt.modact.ModAct
 api-version: 1.16
 description: 'Пример реализации конфига'
 author: Metall

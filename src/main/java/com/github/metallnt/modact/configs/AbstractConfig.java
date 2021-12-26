@@ -1,11 +1,11 @@
-package com.github.metallnt.configinclude.configs;
+package com.github.metallnt.modact.configs;
 
-import com.github.metallnt.configinclude.ConfigInclude;
+import com.github.metallnt.modact.ModAct;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 
 /**
- * Class com.github.metallnt.configinclude.configs
+ * Class com.github.metallnt.modact.configs
  * <p>
  * Date: 19.12.2021 15:44 19 12 2021
  *
@@ -14,14 +14,14 @@ import org.bukkit.configuration.file.FileConfiguration;
 public class AbstractConfig {
 
     private YamlConfig yamlConfig;
-    private ConfigInclude plugin;
+    private ModAct plugin;
     private String fileName;
     private boolean isLoaded = false;
 
     // Создаем новый файл конфига
     public void createNewFile() throws InvalidConfigurationException {
         yamlConfig = new YamlConfig(plugin, fileName, fileName);
-        plugin.getServer().getConsoleSender().sendMessage("Загружен файл " + fileName);
+        plugin.getServer().getConsoleSender().sendMessage("Создан файл " + fileName);
     }
 
     // Получаем файл конфига
@@ -74,11 +74,11 @@ public class AbstractConfig {
         this.fileName = fileName;
     }
 
-    public ConfigInclude getPlugin() {
+    public ModAct getPlugin() {
         return plugin;
     }
 
-    public void setPlugin(ConfigInclude plugin) {
+    public void setPlugin(ModAct plugin) {
         this.plugin = plugin;
     }
 }
