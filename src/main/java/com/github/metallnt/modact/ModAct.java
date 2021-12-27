@@ -2,6 +2,8 @@ package com.github.metallnt.modact;
 
 import com.github.metallnt.modact.configs.DefaultConfig;
 import com.github.metallnt.modact.configs.RulesConfig;
+import com.github.metallnt.modact.listeners.*;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ModAct extends JavaPlugin {
@@ -23,27 +25,42 @@ public final class ModAct extends JavaPlugin {
         setDefaultConfig(new DefaultConfig(this));
         setRulesConfig(new RulesConfig(this));
 
-        // Загружаем конфиг
+        // Загружаем конфиги
+        SetDataFiles();
+
+        // Listeners
+        getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
+        getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);
+        getServer().getPluginManager().registerEvents(new CraftItemListener(this), this);
+        getServer().getPluginManager().registerEvents(new EnchantmentItemListener(this), this);
+        getServer().getPluginManager().registerEvents(new HangingBreakByEntityListener(this), this);
+        getServer().getPluginManager().registerEvents(new HangingPlaceListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerInteractEntityListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
+    }
+
+
+    // Конфиг-файлы. Установка + обновление
+    private void SetDataFiles() {
         if (!this.getDefaultConfig().loadConfig()) {
-            this.getServer().getConsoleSender().sendMessage("Config не загружен!");
+            getLogger().info("Config не загружен!");
         } else {
             // Обновляем
             if (this.getDefaultConfig().updateConfigNewOptions()) {
-                this.getServer().getConsoleSender().sendMessage("Config обновлен");
+                getLogger().info("Config обновлен");
             } else {
-                this.getServer().getConsoleSender().sendMessage("Config не смог обновиться");
+                getLogger().info("Config не смог обновиться");
             }
         }
         if (!this.getRulesConfig().loadConfig()) {
-            this.getServer().getConsoleSender().sendMessage("Rules не загружен");
+            getLogger().info("Rules не загружен");
         } else {
             if (this.getRulesConfig().updateConfigNewOptions()) {
-                this.getServer().getConsoleSender().sendMessage("Rules обновлен");
+                getLogger().info("Rules обновлен");
             } else {
-                this.getServer().getConsoleSender().sendMessage("Rules не смог обновиться");
+                getLogger().info("Rules не смог обновиться");
             }
         }
-
     }
 
     @Override
