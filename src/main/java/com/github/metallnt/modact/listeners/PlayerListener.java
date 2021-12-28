@@ -134,9 +134,11 @@ public class PlayerListener implements Listener {
                 e.setCancelled(true);
                 return;
             }
+            if (Objects.requireNonNull(e.getCursor()).getAmount() + e.getRecipe().getResult().getAmount() < e.getRecipe().getResult().getMaxStackSize()) {
 //            expLvl = expLvl - e.getRecipe().getResult().getAmount();
-            expLvl = expLvl - 1;
-            player.setLevel(expLvl);
+                expLvl = expLvl - 1;
+                player.setLevel(expLvl);
+            }
         }
     }
 
