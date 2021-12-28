@@ -58,8 +58,6 @@ public class DefaultConfig {
         plugin.getServer().getConsoleSender().sendMessage("Создан файл " + fileName);
     }
 
-    // Вставляем функции получения конкретных значений из конфига
-
     private FileConfiguration getConfig() {
         if (yamlConfig != null) {
             return yamlConfig;
@@ -67,8 +65,15 @@ public class DefaultConfig {
         return null;
     }
 
+    // Вставляем функции получения конкретных значений из конфига
+
     public boolean getItemUse() {
         assert this.getConfig() != null;
         return this.getConfig().getBoolean("item_use_check", true);
+    }
+
+    public boolean getDebug() {
+        assert this.getConfig() != null;
+        return this.getConfig().getBoolean("debug", true);
     }
 }

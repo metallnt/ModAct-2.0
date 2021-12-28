@@ -1,12 +1,16 @@
 package com.github.metallnt.modact.permissions;
 
 import com.github.metallnt.modact.ModAct;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.model.user.User;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.*;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.util.logging.Logger;
 
@@ -21,6 +25,7 @@ public class PermCheck {
 
     private final ModAct plugin;
     private final Logger log;
+    RegisteredServiceProvider<LuckPerms> provider;
 
     public PermCheck(ModAct modAct) {
         plugin = modAct;
@@ -28,9 +33,25 @@ public class PermCheck {
     }
 
     public boolean permissionDenied(Player player, String basePermission, Object... args) {
-
+        User user = getApi().getPlayerAdapter(Player.class).getUser(player);
         String permission = assemblePermission(basePermission, args);
-        return !player.hasPermission(permission);
+        log.info(user.getUsername() + " - Итог по правам: " + permission + " " + hasPermission(user, permission));
+        return !hasPermission(user, permission);
+    }
+
+//    protected boolean _permissionDenied(Player player, String permission, Object... arguments) {
+//        User user = getApi().getPlayerAdapter(Player.class).getUser(player);
+//        return !hasPermission(user, assemblePermission(permission, arguments));
+//    }
+
+    private boolean hasPermission(User user, String permission) {
+        return user.getCachedData().getPermissionData().checkPermission(permission).asBoolean();
+    }
+
+    private LuckPerms getApi() {
+        provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+        assert provider != null;
+        return provider.getProvider();
     }
 
     private String assemblePermission(String permission, Object[] args) {

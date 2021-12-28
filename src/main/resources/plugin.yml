@@ -4,3 +4,5 @@ main: com.github.metallnt.modact.ModAct
 api-version: 1.16
 description: 'Пример реализации конфига'
 author: Metall
+softdepend:
+  - LuckPerms

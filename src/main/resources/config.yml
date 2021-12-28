@@ -4,11 +4,6 @@
 #                 #
 # # # # # # # # # #
 
-update_config: true
-new_value: false
+debug: false
 
 item_use_check: true
-blockmascs:
-  - 1
-  - 2
-  - 3
