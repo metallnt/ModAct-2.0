@@ -6,3 +6,9 @@
 
 update_config: true
 new_value: false
+
+item_use_check: true
+blockmascs:
+  - 1
+  - 2
+  - 3

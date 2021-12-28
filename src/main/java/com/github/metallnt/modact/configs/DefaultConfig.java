@@ -1,6 +1,8 @@
 package com.github.metallnt.modact.configs;
 
 import com.github.metallnt.modact.ModAct;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,21 +15,22 @@ import java.util.Collections;
  *
  * @author Metall
  */
-public class DefaultConfig extends AbstractConfig {
+public class DefaultConfig {
 
+    private final ModAct plugin;
     private final String fileName = "config.yml";
+    private YamlConfig yamlConfig;
 
     public DefaultConfig(final ModAct modAct) {
-        this.setFileName(fileName);
-        this.setPlugin(modAct);
+        this.plugin = modAct;
     }
 
     // Обновление конфига с новыми настройками
     public boolean updateConfigNewOptions() {
-        File configFile = new File(this.getPlugin().getDataFolder(), fileName);
+        File configFile = new File(plugin.getDataFolder(), fileName);
 
         try {
-            ConfigUpdater.update(this.getPlugin(), fileName, configFile, Collections.emptyList());
+            ConfigUpdater.update(plugin, fileName, configFile, Collections.emptyList());
             this.reloadConfig();
         } catch (IOException e) {
             e.printStackTrace();
@@ -36,14 +39,36 @@ public class DefaultConfig extends AbstractConfig {
         return true;
     }
 
-    @Override
     public void reloadConfig() {
         this.loadConfig();
     }
 
-    // Вставляем функции получения конкретных значений из конфига
-    public boolean getUpdateConfig() {
-        return this.getConfig().getBoolean("update_config", true);
+    public boolean loadConfig() {
+        try {
+            this.createNewFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
+    private void createNewFile() throws InvalidConfigurationException {
+        yamlConfig = new YamlConfig(plugin, fileName, fileName);
+        plugin.getServer().getConsoleSender().sendMessage("Создан файл " + fileName);
+    }
+
+    // Вставляем функции получения конкретных значений из конфига
+
+    private FileConfiguration getConfig() {
+        if (yamlConfig != null) {
+            return yamlConfig;
+        }
+        return null;
+    }
+
+    public boolean getItemUse() {
+        assert this.getConfig() != null;
+        return this.getConfig().getBoolean("item_use_check", true);
+    }
 }

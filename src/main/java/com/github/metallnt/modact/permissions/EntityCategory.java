@@ -1,4 +1,4 @@
-package com.github.metallnt.modact.listeners_old;
+package com.github.metallnt.modact.permissions;
 
 import org.bukkit.entity.*;
 
@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Class com.github.metallnt.modact.listeners_old
+ * Class com.github.metallnt.modact.permissions
  * <p>
- * Date: 26.12.2021 20:19 26 12 2021
+ * Date: 27.12.2021 5:41 27 12 2021
  *
  * @author Metall
  */

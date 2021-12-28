@@ -1,6 +1,8 @@
 package com.github.metallnt.modact.configs;
 
 import com.github.metallnt.modact.ModAct;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,20 +16,24 @@ import java.util.List;
  *
  * @author Metall
  */
-public class RulesConfig extends AbstractConfig {
+public class RulesConfig {
 
+    private final ModAct plugin;
     private final String fileName = "lists.yml";
-    public RulesConfig(ModAct modAct) {
-        this.setFileName(fileName);
-        this.setPlugin(modAct);
+    private YamlConfig yamlConfig;
+
+
+    //    private final List<String> mask = new ArrayList<>(this.getConfig().getStringList("blockmascs"));
+    public RulesConfig(final ModAct modAct) {
+        this.plugin = modAct;
     }
 
     // Обновление правил с новыми настройками
     public boolean updateConfigNewOptions() {
-        File rulesFile = new File(this.getPlugin().getDataFolder(), fileName);
+        File rulesFile = new File(plugin.getDataFolder(), fileName);
 
         try {
-            ConfigUpdater.update(this.getPlugin(), fileName, rulesFile, Collections.emptyList());
+            ConfigUpdater.update(plugin, fileName, rulesFile, Collections.emptyList());
             this.reloadConfig();
         } catch (IOException e) {
             e.printStackTrace();
@@ -36,9 +42,33 @@ public class RulesConfig extends AbstractConfig {
         return true;
     }
 
-    @Override
+
     public void reloadConfig() {
         this.loadConfig();
+    }
+
+    public boolean loadConfig() {
+        try {
+            this.createNewFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    private void createNewFile() throws InvalidConfigurationException {
+        yamlConfig = new YamlConfig(plugin, fileName, fileName);
+        plugin.getServer().getConsoleSender().sendMessage("Создан файл " + fileName);
+    }
+
+    public FileConfiguration getConfig() {
+        // Если файл YAML не пустой, то возвращаем его
+        if (yamlConfig != null) {
+            return yamlConfig;
+        }
+        // Иначе null
+        return null;
     }
 
     // Получение значений
@@ -47,6 +77,8 @@ public class RulesConfig extends AbstractConfig {
     }
 
     public List<String> getMascBlocks() {
+//        return new ArrayList<>(getConfig().getStringList("blockmascs"));
+//        return this.getConfig().getStringList("blockmasks");
         return this.getConfig().getStringList("blockmasks");
     }
 

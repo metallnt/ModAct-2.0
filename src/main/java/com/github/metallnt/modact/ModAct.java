@@ -2,8 +2,10 @@ package com.github.metallnt.modact;
 
 import com.github.metallnt.modact.configs.DefaultConfig;
 import com.github.metallnt.modact.configs.RulesConfig;
-import com.github.metallnt.modact.listeners.*;
-import org.bukkit.event.Listener;
+import com.github.metallnt.modact.listeners.BlockListener;
+import com.github.metallnt.modact.listeners.PlayerListener;
+import com.github.metallnt.modact.managers.MessageManager;
+import com.github.metallnt.modact.permissions.PermCheck;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ModAct extends JavaPlugin {
@@ -12,6 +14,8 @@ public final class ModAct extends JavaPlugin {
 
     private DefaultConfig defaultConfig;
     private RulesConfig rulesConfig;
+    private PermCheck permCheck;
+    private MessageManager messageManager;
 
     public static ModAct getInstance() {
         return plugin;
@@ -25,41 +29,29 @@ public final class ModAct extends JavaPlugin {
         setDefaultConfig(new DefaultConfig(this));
         setRulesConfig(new RulesConfig(this));
 
+        setMessageManager(new MessageManager(this));
+        setPermCheck(new PermCheck(this));
         // Загружаем конфиги
         SetDataFiles();
 
         // Listeners
-        getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
-        getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);
-        getServer().getPluginManager().registerEvents(new CraftItemListener(this), this);
-        getServer().getPluginManager().registerEvents(new EnchantmentItemListener(this), this);
-        getServer().getPluginManager().registerEvents(new HangingBreakByEntityListener(this), this);
-        getServer().getPluginManager().registerEvents(new HangingPlaceListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerInteractEntityListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
+        getServer().getPluginManager().registerEvents(new BlockListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
     }
 
 
     // Конфиг-файлы. Установка + обновление
     private void SetDataFiles() {
-        if (!this.getDefaultConfig().loadConfig()) {
-            getLogger().info("Config не загружен!");
-        } else {
             // Обновляем
             if (this.getDefaultConfig().updateConfigNewOptions()) {
                 getLogger().info("Config обновлен");
             } else {
                 getLogger().info("Config не смог обновиться");
             }
-        }
         if (!this.getRulesConfig().loadConfig()) {
             getLogger().info("Rules не загружен");
         } else {
-            if (this.getRulesConfig().updateConfigNewOptions()) {
-                getLogger().info("Rules обновлен");
-            } else {
-                getLogger().info("Rules не смог обновиться");
-            }
+            getLogger().info("Rules loaded!");
         }
     }
 
@@ -83,4 +75,21 @@ public final class ModAct extends JavaPlugin {
     public void setRulesConfig(RulesConfig rulesConfig) {
         this.rulesConfig = rulesConfig;
     }
+
+    public PermCheck getPermCheck() {
+        return permCheck;
+    }
+
+    public void setPermCheck(PermCheck permCheck) {
+        this.permCheck = permCheck;
+    }
+
+    public MessageManager getMessageManager() {
+        return messageManager;
+    }
+
+    public void setMessageManager(MessageManager messageManager) {
+        this.messageManager = messageManager;
+    }
+
 }

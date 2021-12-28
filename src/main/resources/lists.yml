@@ -1,4 +1,4 @@
-// List instruments
+# List instruments
 tools:
   - woodenpickaxe
   - stonepickaxe
@@ -30,7 +30,7 @@ tools:
   - ironhoe
   - diamondhoe
   - netheritehoe
-// List charset for mast free blocks
+# List charset for mast free blocks
 blockmasks:
   - vine
   - fire
@@ -114,11 +114,11 @@ blockmasks:
   - beenest
   - honey
   - snow
-// List ID free blocks
+# List ID free blocks
 blockexact:
   - sand
   - sweetberrybush
-// List ID freezed blocks for tools
+# List ID freezed blocks for tools
 wooden:
   - netherbrickslab
   - stonebrickslab
