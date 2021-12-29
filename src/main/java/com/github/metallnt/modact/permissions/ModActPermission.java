@@ -10,6 +10,11 @@ package com.github.metallnt.modact.permissions;
  * @author Metall
  */
 public final class ModActPermission {
+    public static final String RELOAD_PERM = "modact.reload"; // Разрешение на перезагрузку
+    public static final String HELP_PERM = "modact.help"; // Разрешение на справку
+    public static final String ADD_PERM = "modact.add"; // Разрешение на добавление в списки
+    public static final String DEL_PERM = "modact.delete"; // Разрешение на удаление из списков
+
     public static final String BLOCK_DESTROY = "modact.block.destroy"; // Разрушение блока
     public static final String BLOCK_PLACE = "modact.block.place"; // Размещение блока
     public static final String DAMAGE_DEAL = "modact.damage.deal"; // Нанесение урона

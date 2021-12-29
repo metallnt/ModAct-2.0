@@ -1,5 +1,6 @@
 package com.github.metallnt.modact;
 
+import com.github.metallnt.modact.commands.manager.CommandsManager;
 import com.github.metallnt.modact.configs.DefaultConfig;
 import com.github.metallnt.modact.configs.RulesConfig;
 import com.github.metallnt.modact.listeners.BlockListener;
@@ -16,6 +17,7 @@ public final class ModAct extends JavaPlugin {
     private RulesConfig rulesConfig;
     private PermCheck permCheck;
     private MessageManager messageManager;
+    private CommandsManager commandsManager;
 
     public static ModAct getInstance() {
         return plugin;
@@ -31,6 +33,7 @@ public final class ModAct extends JavaPlugin {
 
         setMessageManager(new MessageManager(this));
         setPermCheck(new PermCheck(this));
+        setCommandsManager(new CommandsManager(this));
         // Загружаем конфиги
         SetDataFiles();
 
@@ -92,4 +95,11 @@ public final class ModAct extends JavaPlugin {
         this.messageManager = messageManager;
     }
 
+    public CommandsManager getCommandsManager() {
+        return commandsManager;
+    }
+
+    public void setCommandsManager(CommandsManager commandsManager) {
+        this.commandsManager = commandsManager;
+    }
 }
