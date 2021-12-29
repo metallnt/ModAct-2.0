@@ -10,6 +10,7 @@ import com.google.common.collect.Lists;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -90,8 +91,8 @@ public class CommandsManager implements TabExecutor {
             BaseComponent[] builder = new ComponentBuilder("Возможно, вы имели в виду ")
                     .color(net.md_5.bungee.api.ChatColor.DARK_AQUA).append("/modact ")
                     .color(net.md_5.bungee.api.ChatColor.GREEN).append(ModActTools.seperateList(bestSuggestions, "or"))
-                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Это предложения, основанные на вашем вводе.")
-                            .create())).append("?").color(net.md_5.bungee.api.ChatColor.DARK_AQUA).create();
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("Это предложения, основанные на вашем вводе.")))
+                    .append("?").color(net.md_5.bungee.api.ChatColor.DARK_AQUA).create();
             if (sender instanceof Player) {
                 Player player = (Player) sender;
                 player.spigot().sendMessage(builder);

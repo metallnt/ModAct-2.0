@@ -1,6 +1,7 @@
 package com.github.metallnt.modact.permissions;
 
 import com.github.metallnt.modact.ModAct;
+import com.github.metallnt.modact.configs.DefaultConfig;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
@@ -24,18 +25,20 @@ import java.util.logging.Logger;
 public class PermCheck {
 
     private final ModAct plugin;
+    private final DefaultConfig config;
     private final Logger log;
     RegisteredServiceProvider<LuckPerms> provider;
 
     public PermCheck(ModAct modAct) {
         plugin = modAct;
+        config = modAct.getDefaultConfig();
         log = modAct.getLogger();
     }
 
     public boolean permissionDenied(Player player, String basePermission, Object... args) {
         User user = getApi().getPlayerAdapter(Player.class).getUser(player);
         String permission = assemblePermission(basePermission, args);
-        log.info(user.getUsername() + " - Итог по правам: " + permission + " " + hasPermission(user, permission));
+        debug(user.getUsername() + " - Итог по правам: " + permission + " " + hasPermission(user, permission));
         return !hasPermission(user, permission);
     }
 
@@ -66,6 +69,12 @@ public class PermCheck {
             }
         }
         return builder.toString();
+    }
+
+    private void debug(String message) {
+        if (config.getDebug()) {
+            log.info(message);
+        }
     }
 
     protected String getObjectPermission(Object obj) {

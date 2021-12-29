@@ -6,3 +6,23 @@ description: 'Пример реализации конфига'
 author: Metall
 softdepend:
   - LuckPerms
+commands:
+  modact:
+    description: Главная команда плагина ModAct
+    usage: ModAct отключен. Проверьте server.log
+    aliases: [ mac ]
+permissions:
+  modact:
+    default: op
+  modact.help:
+    default: op
+    description: Справка по командам
+  modact.reload:
+    default: op
+    description: Перезагрузка плагина
+  modact.add:
+    default: op
+    description: Добавление блока в один из списков
+  modact.delete:
+    default: op
+    description: Удаление блока из одного из списков

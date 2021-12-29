@@ -23,6 +23,7 @@ import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 /**
  * Class com.github.metallnt.modact.listeners
@@ -33,9 +34,10 @@ import java.util.Objects;
  */
 public class PlayerListener implements Listener {
 
-    private final DefaultConfig conf;
+    private final DefaultConfig config;
     private final PermCheck perm;
     private final MessageManager msg;
+    private final Logger log;
     // List tools
     private final List<String> blocksMask;
     private final List<String> blocksExact;
@@ -51,8 +53,9 @@ public class PlayerListener implements Listener {
 
     public PlayerListener(ModAct modAct) {
         perm = modAct.getPermCheck();
-        conf = modAct.getDefaultConfig();
+        config = modAct.getDefaultConfig();
         msg = modAct.getMessageManager();
+        log = modAct.getLogger();
         RulesConfig rules = modAct.getRulesConfig();
         blocksMask = rules.getMascBlocks();
         modAct.getLogger().info(blocksMask.toString());
@@ -68,7 +71,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractEntity(PlayerInteractEntityEvent e) {
-        if (conf.getItemUse()) {
+        if (config.getItemUse()) {
             if (perm.permissionDenied(e.getPlayer(),
                     ModActPermission.ITEM_USE,
                     e.getPlayer().getInventory().getItemInMainHand(),
@@ -265,6 +268,12 @@ public class PlayerListener implements Listener {
                 return; // нет необходимости проверять дальше
             default:
                 break;
+        }
+    }
+
+    private void debug(String message) {
+        if (config.getDebug()) {
+            log.info(message);
         }
     }
 }
