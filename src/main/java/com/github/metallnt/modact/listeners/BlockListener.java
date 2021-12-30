@@ -31,6 +31,7 @@ public class BlockListener implements Listener {
     private final MessageManager message;
     private final PermCheck perm;
     private final DefaultConfig config;
+    private String blockName;
 
     public BlockListener(ModAct modAct) {
 //        plugin = modAct;
@@ -42,20 +43,22 @@ public class BlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW) // Разбивание блока
     public void onBlockBreak(BlockBreakEvent e) {
+        blockName = e.getBlock().getType().name();
         debug("BlockBreakEvent");
         if (perm.permissionDenied(e.getPlayer(), ModActPermission.BLOCK_DESTROY, e.getBlock())) {
-            debug("Игроку " + e.getPlayer() + " нельзя сломать блок " + e.getBlock().getType().name());
-            message.onActionBar(e.getPlayer(), "Вы не можете сломать блок: " + e.getBlock().getType().name());
+            debug("Игроку " + e.getPlayer() + " нельзя сломать блок " + blockName);
+            message.onActionBar(e.getPlayer(), "Вы не можете сломать блок: " + blockName);
             e.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.LOW) // Размещение блока
     public void onBlockPlace(BlockPlaceEvent e) {
+        blockName = e.getBlock().getType().name();
         debug("BlockPlaceEvent");
-        if (perm.permissionDenied(e.getPlayer(), ModActPermission.BLOCK_PLACE, e.getBlock())) {
-            debug("Игроку " + e.getPlayer() + " нельзя поставить блок " + e.getBlock().getType().name());
-            message.onActionBar(e.getPlayer(), "Вы не можете установить: " + e.getBlock().getType().name());
+        if (perm.permissionDenied(e.getPlayer(), ModActPermission.BLOCK_PLACE, blockName)) {
+            debug("Игроку " + e.getPlayer() + " нельзя поставить блок " + blockName);
+            message.onActionBar(e.getPlayer(), "Вы не можете установить: " + blockName);
             e.setCancelled(true);
         }
     }
@@ -63,14 +66,15 @@ public class BlockListener implements Listener {
     // Удаление висячего блока
     @EventHandler(priority = EventPriority.LOW)
     public void onHangingBreakByEntity(HangingBreakByEntityEvent e) {
+        blockName = e.getEntity().getType().name();
         debug("HangingBreakByEntityEvent");
         if (e.getRemover() instanceof Player) {
             Player player = ((Player) e.getRemover()).getPlayer();
             debug("Не игрок вызвал event");
             assert player != null;
-            if (perm.permissionDenied(player, ModActPermission.BLOCK_DESTROY, e.getEntity().getType())) {
-                debug("Игроку " + player + " нельзя сломать " + e.getEntity().getType().name());
-                message.onActionBar(player, "Вы не можете сломать блок: " + e.getEntity().getType().name());
+            if (perm.permissionDenied(player, ModActPermission.BLOCK_DESTROY, blockName)) {
+                debug("Игроку " + player + " нельзя сломать " + blockName);
+                message.onActionBar(player, "Вы не можете сломать блок: " + blockName);
                 e.setCancelled(true);
             }
         }
@@ -79,10 +83,11 @@ public class BlockListener implements Listener {
     // Разместить висячий блок
     @EventHandler(priority = EventPriority.LOW)
     public void onPaintingPlace(HangingPlaceEvent e) {
+        blockName = e.getEntity().getType().name();
         debug("HangingPlaceEvent");
-        if (perm.permissionDenied(Objects.requireNonNull(e.getPlayer()), ModActPermission.BLOCK_PLACE, e.getEntity().getType())) {
-            debug("Игроку " + e.getPlayer() + " нельзя поставить блок " + e.getBlock().getType().name());
-            message.onActionBar(e.getPlayer(), "Вы не можете установить: " + e.getBlock().getType().name());
+        if (perm.permissionDenied(Objects.requireNonNull(e.getPlayer()), ModActPermission.BLOCK_PLACE, blockName)) {
+            debug("Игроку " + e.getPlayer() + " нельзя поставить блок " + blockName);
+            message.onActionBar(e.getPlayer(), "Вы не можете установить: " + blockName);
             e.setCancelled(true);
         }
     }

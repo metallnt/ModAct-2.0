@@ -10,7 +10,7 @@ import java.util.Collections;
 
 /**
  * Class com.github.metallnt.modact.configs
- * <p>
+ * Этот класс используется для доступа к свойствам файла config.yml
  * Date: 19.12.2021 15:44 19 12 2021
  *
  * @author Metall
@@ -25,7 +25,12 @@ public class DefaultConfig {
         this.plugin = modAct;
     }
 
-    // Обновление конфига с новыми настройками
+    /**
+     * Этот метод проверяет, есть ли в файле (в JAR) параметры, которых нет в файле на диске. Если так,
+     * он добавит эти значения при сохранении комментариев файла на диске.
+     *
+     * @return true, если файл был успешно проверен (и при необходимости обновлен), иначе false.
+     */
     public boolean updateConfigNewOptions() {
         File configFile = new File(plugin.getDataFolder(), fileName);
 
@@ -40,7 +45,9 @@ public class DefaultConfig {
     }
 
     public void reloadConfig() {
-        this.loadConfig();
+        if (loadConfig()) {
+            plugin.getServer().getConsoleSender().sendMessage("config reloaded!");
+        }
     }
 
     public boolean loadConfig() {
@@ -67,11 +74,21 @@ public class DefaultConfig {
 
     // Вставляем функции получения конкретных значений из конфига
 
+    /**
+     * Включена ли функция проверки использования предметов
+     *
+     * @return true, если нужна проверка, false, если пропустить и работать по умолчанию
+     */
     public boolean getItemUse() {
         assert this.getConfig() != null;
         return this.getConfig().getBoolean("item_use_check", true);
     }
 
+    /**
+     * Включение сообщений деббага в консоль
+     *
+     * @return true - сообщения включены
+     */
     public boolean getDebug() {
         assert this.getConfig() != null;
         return this.getConfig().getBoolean("debug", true);

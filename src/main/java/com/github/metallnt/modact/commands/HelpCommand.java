@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 /**
  * Class com.github.metallnt.modact.commands.manager
- * <p>
+ * Обработчик /modact help
  * Date: 28.12.2021 20:10 28 12 2021
  *
  * @author Metall

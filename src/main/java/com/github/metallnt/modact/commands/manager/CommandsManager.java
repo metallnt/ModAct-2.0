@@ -21,7 +21,14 @@ import java.util.*;
 
 /**
  * Class com.github.metallnt.modact.commands.manager
+ * Этот класс будет управлять всеми входящими запросами команд. Команды не
+ * выполняются здесь, они только отправляются в нужное место.
  * <p>
+ * Команды хранятся в хэш-карте. Ключ этой хэш-карты - это список
+ * строк. Эти строки представляют, какой текст вы должны ввести, чтобы выполнить эту
+ * команду. Например, «раз» сохраняется для команды «/modact раз». В
+ * значение хэш-карты - это класс {@linkplain ModActCommand}, который выполняет
+ * фактическую логику команды.
  * Date: 28.12.2021 19:34 28 12 2021
  *
  * @author Metall
@@ -31,10 +38,13 @@ public class CommandsManager implements TabExecutor {
     private final ModAct plugin;
     private final Map<List<String>, ModActCommand> registeredCommands = new LinkedHashMap<>();
 
+    /**
+     * Здесь настраиваются все псевдонимы команд.
+     */
     public CommandsManager(final ModAct modAct) {
         this.plugin = modAct;
 
-        // Register Command classes
+        // Регистрируем классы команд
         registeredCommands.put(Collections.singletonList("help"), new HelpCommand(plugin));
         registeredCommands.put(Collections.singletonList("reload"), new ReloadCommand(plugin));
         registeredCommands.put(Collections.singletonList("add"), new AddCommand(plugin));
@@ -42,8 +52,6 @@ public class CommandsManager implements TabExecutor {
     }
 
     // Получить хэш-карту используемых команд
-
-
     public Map<List<String>, ModActCommand> getRegisteredCommands() {
         return registeredCommands;
     }
@@ -147,6 +155,13 @@ public class CommandsManager implements TabExecutor {
         return null;
     }
 
+    /**
+     * Возвращает подсписок из данного списка, содержащий элементы, которые начинаются с данной строки, если строка не пуста
+     *
+     * @param list Список для обработки
+     * @param arg  Типизированная строка
+     * @return Подсписок, если строка не пуста
+     */
     private List<String> findSuggestedCommands(List<String> list, String arg) {
         if (arg.equals("")) return list;
 

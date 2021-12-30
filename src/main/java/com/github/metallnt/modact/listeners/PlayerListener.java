@@ -23,7 +23,6 @@ import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Logger;
 
 /**
  * Class com.github.metallnt.modact.listeners
@@ -37,7 +36,6 @@ public class PlayerListener implements Listener {
     private final DefaultConfig config;
     private final PermCheck perm;
     private final MessageManager msg;
-    private final Logger log;
     // List tools
     private final List<String> blocksMask;
     private final List<String> blocksExact;
@@ -55,7 +53,6 @@ public class PlayerListener implements Listener {
         perm = modAct.getPermCheck();
         config = modAct.getDefaultConfig();
         msg = modAct.getMessageManager();
-        log = modAct.getLogger();
         RulesConfig rules = modAct.getRulesConfig();
         blocksMask = rules.getMascBlocks();
         modAct.getLogger().info(blocksMask.toString());
@@ -69,6 +66,11 @@ public class PlayerListener implements Listener {
         netherBlocks = rules.getNethers();
     }
 
+    /**
+     * Слушатель взаимодействия с сущностью
+     *
+     * @param e - действие
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractEntity(PlayerInteractEntityEvent e) {
         if (config.getItemUse()) {
@@ -84,7 +86,11 @@ public class PlayerListener implements Listener {
         }
     }
 
-    // Взаимодействие с предметом
+    /**
+     * Слушатель взаимодействия с блоком
+     *
+     * @param e - действие
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteract(PlayerInteractEvent e) {
         if (!e.hasBlock()) {
@@ -111,7 +117,11 @@ public class PlayerListener implements Listener {
         }
     }
 
-    // Крафт вещей
+    /**
+     * Слушатель крафта
+     *
+     * @param e Event
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onItemCraft(CraftItemEvent e) {
         player = (Player) e.getWhoClicked();
@@ -147,6 +157,12 @@ public class PlayerListener implements Listener {
 
     // Чарование на столе зачарования
     // Кажется тут нужно все переделать на клик по ячейке стола зачарования
+
+    /**
+     * Слушатель зачарования
+     *
+     * @param e Event
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onItemEnchant(EnchantItemEvent e) {
         if (perm.permissionDenied(e.getEnchanter(), ModActPermission.ITEM_ENCHANT, e.getItem())) {
@@ -155,6 +171,13 @@ public class PlayerListener implements Listener {
         }
     }
 
+    /**
+     * Проверка правого клика по правам, отмена
+     *
+     * @param e      PlayerInteractEvent
+     * @param player Player
+     * @param block  Block
+     */
     private void checkRightClickBlock(PlayerInteractEvent e, Player player, Block block) {
         if (perm.permissionDenied(player, ModActPermission.BLOCK_USE, block.getType())) {
             msg.onActionBar(player, "Вы не можете использовать " + block.getType().name());
@@ -162,6 +185,13 @@ public class PlayerListener implements Listener {
         }
     }
 
+    /**
+     * Проверка левого клика по правам, отмена
+     *
+     * @param e      PlayerInteractEvent
+     * @param player Player
+     * @param block  Block
+     */
     private void checkLeftClickBlock(PlayerInteractEvent e, Player player, Block block) {
         String targetBlock = block.getType().name().toLowerCase().replace("_", "");
         // Проверка блоков по маске
@@ -199,7 +229,13 @@ public class PlayerListener implements Listener {
         }
     }
 
-    // Проверка по спискам инструментов
+    /**
+     * Проверка по инструментам из списка в lists.yml
+     *
+     * @param e     PlayerInteractEvent
+     * @param tool  String Инструмент в руке
+     * @param block Block
+     */
     private void checkToolPerm(PlayerInteractEvent e, String tool, Block block) {
         player = e.getPlayer();
         String blockName = block.getType().name();
@@ -254,6 +290,11 @@ public class PlayerListener implements Listener {
         }
     }
 
+    /**
+     * Белый список предметов (только зелья и опыт. Не знаю, что еще нужно добавить)
+     *
+     * @param player Player
+     */
     private void checkWhiteListItems(Player player) {
         switch (player.getInventory().getItemInMainHand().getType()) {
             case POTION: //Только проверяйте зелье взрывное.
@@ -268,12 +309,6 @@ public class PlayerListener implements Listener {
                 return; // нет необходимости проверять дальше
             default:
                 break;
-        }
-    }
-
-    private void debug(String message) {
-        if (config.getDebug()) {
-            log.info(message);
         }
     }
 }

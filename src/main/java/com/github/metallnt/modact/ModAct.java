@@ -42,15 +42,16 @@ public final class ModAct extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
     }
 
-
-    // Конфиг-файлы. Установка + обновление
+    /**
+     * Конфиг-файлы. Установка + обновление
+     */
     private void SetDataFiles() {
-            // Обновляем
-            if (this.getDefaultConfig().updateConfigNewOptions()) {
-                getLogger().info("Config обновлен");
-            } else {
-                getLogger().info("Config не смог обновиться");
-            }
+        // Обновляем
+        if (this.getDefaultConfig().updateConfigNewOptions()) {
+            getLogger().info("Config обновлен");
+        } else {
+            getLogger().info("Config не смог обновиться");
+        }
         if (!this.getRulesConfig().loadConfig()) {
             getLogger().info("Rules не загружен");
         } else {
@@ -62,7 +63,6 @@ public final class ModAct extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
     }
-
     public DefaultConfig getDefaultConfig() {
         return defaultConfig;
     }

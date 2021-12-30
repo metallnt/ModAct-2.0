@@ -14,13 +14,29 @@ import java.util.stream.Collectors;
 
 /**
  * Class com.github.metallnt.modact.configs
- * <p>
+ * Класс для обновления/добавления новых разделов/ключей в вашу конфигурацию, сохраняя при этом ваши текущие значения
+ * и сохраняя ваши комментарии.
+ * Алгоритм:
+ * Читаем новый файл и сканируем его на предмет комментариев и игнорируемых разделов; если игнорируемый раздел обнаружен,
+ * он рассматривается как комментарий.
+ * Читаем и записываем каждую строку новой конфигурации, если старая конфигурация имеет значение для данного ключа,
+ * она записывает это значение в новый конфиг.
+ * Если к ключу прикреплен комментарий над ним, он записывается первым.
  * Date: 19.12.2021 15:45 19 12 2021
  *
  * @author Metall
  */
 public class ConfigUpdater {
 
+    /**
+     * Обновление config.yml с переносом старых значений в новый файл.
+     * Включительно один комментарий над значением.
+     *
+     * @param plugin          ModAct
+     * @param resourceName    Имя ресурса
+     * @param toUpdate        Файл для обновления
+     * @param ignoredSections Список игнорируемых секций
+     */
     public static void update(ModAct plugin, String resourceName, File toUpdate, List<String> ignoredSections) throws IOException {
         BufferedReader newReader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(plugin.getResource(resourceName)), StandardCharsets.UTF_8));
         List<String> newLines = newReader.lines().collect(Collectors.toList());
@@ -39,6 +55,17 @@ public class ConfigUpdater {
     }
 
     // Write method
+
+    /**
+     * Вся работа по переписи ключей и комментариев
+     *
+     * @param newConfig       Новый конфиг
+     * @param oldConfig       Старый конфиг
+     * @param comments        Карта комментариев
+     * @param ignoredSections Список Игнорируемых секций
+     * @param writer          BufferedWriter
+     * @param yaml            YAML файл
+     */
     private static void write(FileConfiguration newConfig, FileConfiguration oldConfig, Map<String, String> comments, List<String> ignoredSections, BufferedWriter writer, Yaml yaml) throws IOException {
         outer:
         for (String key : newConfig.getKeys(true)) {
@@ -87,6 +114,16 @@ public class ConfigUpdater {
         writer.close();
     }
 
+    /**
+     * Не работает с разделами конфигурации, должен быть реальным объектом.
+     * Автоматически проверяет возможность сериализации и записывает в файл.
+     *
+     * @param obj          Object
+     * @param actualKey    String
+     * @param prefixSpaces String
+     * @param yaml         Yaml
+     * @param writer       BufferedWriter
+     */
     private static void write(Object obj, String actualKey, String prefixSpaces, Yaml yaml, BufferedWriter writer) throws IOException {
         if (obj instanceof ConfigurationSerializable) {
             writer.write(prefixSpaces + actualKey + ": " + yaml.dump(((ConfigurationSerializable) obj).serialize()));
@@ -103,6 +140,14 @@ public class ConfigUpdater {
         }
     }
 
+    /**
+     * Записывает секцию конфигурации
+     *
+     * @param writer       BufferedWriter
+     * @param actualKey    Ключ
+     * @param prefixSpaces Префикс
+     * @param section      ConfigurationSection
+     */
     private static void writeSection(BufferedWriter writer, String actualKey, String prefixSpaces, ConfigurationSection section) throws IOException {
         if (section.getKeys(false).isEmpty()) {
             writer.write(prefixSpaces + actualKey + ": {}");
@@ -112,10 +157,28 @@ public class ConfigUpdater {
         writer.write("\n");
     }
 
+    /**
+     * Записывает список любого объекта
+     *
+     * @param list         Список
+     * @param actualKey    Ключ
+     * @param prefixSpaces Префикс
+     * @param yaml         YAML
+     * @param writer       BufferedWriter
+     */
     private static void writeList(List<?> list, String actualKey, String prefixSpaces, Yaml yaml, BufferedWriter writer) throws IOException {
         writer.write(getListAsString(list, actualKey, prefixSpaces, yaml));
     }
 
+    /**
+     * Получаем список как строку
+     *
+     * @param list         Список
+     * @param actualKey    Ключ
+     * @param prefixSpaces Префикс
+     * @param yaml         Yaml
+     * @return Строку списка
+     */
     private static String getListAsString(List<?> list, String actualKey, String prefixSpaces, Yaml yaml) {
         StringBuilder builder = new StringBuilder(prefixSpaces).append(actualKey).append(":");
 
@@ -145,8 +208,16 @@ public class ConfigUpdater {
         return builder.toString();
     }
 
-    //Key is the config key, value = comment and/or ignored sections
-    //Parses comments, blank lines, and ignored sections
+    /**
+     * Ключ - это ключ конфигурации, значение = комментарий и / или игнорируемые разделы
+     * Анализирует комментарии, пустые строки и игнорируемые разделы
+     *
+     * @param lines           Список
+     * @param ignoredSections Игнорируемые разделы
+     * @param oldConfig       Старый конфиг
+     * @param yaml            Yaml
+     * @return Комментарии
+     */
     private static Map<String, String> parseComments(List<String> lines, List<String> ignoredSections,
                                                      FileConfiguration oldConfig, Yaml yaml) {
         Map<String, String> comments = new HashMap<>();
@@ -218,7 +289,12 @@ public class ConfigUpdater {
         }
     }
 
-    //Counts spaces in front of key and divides by 2 since 1 indent = 2 spaces
+    /**
+     * Подсчитывает пробелы перед клавишей и делит на 2, так как 1 отступ = 2 пробела
+     *
+     * @param s Строка
+     * @return колличество отступов
+     */
     private static int countIndents(String s) {
         int spaces = 0;
 
@@ -234,6 +310,13 @@ public class ConfigUpdater {
     }
 
     //Ex. keyBuilder = key1.key2.key3 --> key1.key2
+
+    /**
+     * Удаляет последний ключ
+     * Пример. keyBuilder = key1.key2.key3 -> key1.key2
+     *
+     * @param keyBuilder Полученный StringBuilder - последний ключ
+     */
     private static void removeLastKey(StringBuilder keyBuilder) {
         String temp = keyBuilder.toString();
         String[] keys = temp.split("\\.");
@@ -252,7 +335,9 @@ public class ConfigUpdater {
         return keys[keys.length - 1];
     }
 
-    //Updates the keyBuilder and returns configLines number of indents
+    /**
+     * Обновляет keyBuilder и возвращает количество отступов configLines
+     */
     private static int setFullKey(StringBuilder keyBuilder, String configLine, int lastLineIndentCount) {
         int currentIndents = countIndents(configLine);
         String key = configLine.trim().split(":")[0];

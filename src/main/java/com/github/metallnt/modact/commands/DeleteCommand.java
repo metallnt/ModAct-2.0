@@ -8,6 +8,8 @@ import org.bukkit.command.CommandSender;
 
 /**
  * Class com.github.metallnt.modact.commands
+ * Обработчик /modact delete
+ * Команда для удаления значения из одного из списков в файле lists.yml
  * <p>
  * Date: 29.12.2021 11:54 29 12 2021
  *

@@ -17,10 +17,6 @@ public final class ModActPermission {
 
     public static final String BLOCK_DESTROY = "modact.block.destroy"; // Разрушение блока
     public static final String BLOCK_PLACE = "modact.block.place"; // Размещение блока
-    public static final String DAMAGE_DEAL = "modact.damage.deal"; // Нанесение урона
-    public static final String DAMAGE_TAKE = "modact.damage.take"; // Получение урона
-    public static final String TAME = "modact.tame"; // Приручение
-    public static final String TARGET = "modact.target"; // Цель
     public static final String BLOCK_USE = "modact.block.use"; // Использование блока
     public static final String ITEM_USE = "modact.item.use"; // Использование предмета
     public static final String ITEM_THROW = "modact.item.throw"; //

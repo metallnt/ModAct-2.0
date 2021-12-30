@@ -24,6 +24,12 @@ public class MessageManager {
         log = modAct.getLogger();
     }
 
+    /**
+     * Отправка сообщение игроку в экшн бар
+     *
+     * @param player Игрок Player
+     * @param msg    Сообщение String
+     */
     public void onActionBar(Player player, String msg) {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
     }

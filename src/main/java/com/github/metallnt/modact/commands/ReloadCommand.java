@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 
 /**
  * Class com.github.metallnt.modact.commands
- * <p>
+ * Обработчик /modact reload
  * Date: 28.12.2021 20:11 28 12 2021
  *
  * @author Metall

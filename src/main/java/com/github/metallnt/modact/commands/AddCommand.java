@@ -8,7 +8,8 @@ import org.bukkit.command.CommandSender;
 
 /**
  * Class com.github.metallnt.modact.commands.manager
- * <p>
+ * Обработчик /modact add
+ * Команда для добаления значения в один из списков в файле lists.yml
  * Date: 29.12.2021 11:50 29 12 2021
  *
  * @author Metall

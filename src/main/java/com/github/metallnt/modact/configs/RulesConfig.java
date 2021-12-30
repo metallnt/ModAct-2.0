@@ -11,7 +11,9 @@ import java.util.List;
 
 /**
  * Class com.github.metallnt.modact.configs
- * <p>
+ * Данные файла lists.yml
+ * В нем содержатся списки значений по умолчанию.
+ * Этот класс читает и изменяет эти списки.(пока что только чтение реализовано)
  * Date: 26.12.2021 23:51 26 12 2021
  *
  * @author Metall
@@ -22,13 +24,11 @@ public class RulesConfig {
     private final String fileName = "lists.yml";
     private YamlConfig yamlConfig;
 
-
-    //    private final List<String> mask = new ArrayList<>(this.getConfig().getStringList("blockmascs"));
     public RulesConfig(final ModAct modAct) {
         this.plugin = modAct;
     }
 
-    // Обновление правил с новыми настройками
+    // Обновление правил с новыми настройками (возможно не понадобится никогда)
     public boolean updateConfigNewOptions() {
         File rulesFile = new File(plugin.getDataFolder(), fileName);
 
@@ -77,8 +77,6 @@ public class RulesConfig {
     }
 
     public List<String> getMascBlocks() {
-//        return new ArrayList<>(getConfig().getStringList("blockmascs"));
-//        return this.getConfig().getStringList("blockmasks");
         return this.getConfig().getStringList("blockmasks");
     }
 
