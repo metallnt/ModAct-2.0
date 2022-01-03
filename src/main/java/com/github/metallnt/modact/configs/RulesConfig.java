@@ -62,6 +62,27 @@ public class RulesConfig {
         plugin.getServer().getConsoleSender().sendMessage("Создан файл " + fileName);
     }
 
+    public boolean addData(String arg, List<String> ids) {
+        if (arg.equals("mask") || arg.equals("exact") || arg.equals("wood") || arg.equals("stone")
+                || arg.equals("iron") || arg.equals("gold") || arg.equals("diamond") || arg.equals("nether")) {
+            for (String id : ids) {
+                id = id.replace("_", "").toLowerCase();
+                this.getConfig().set(arg, id);
+                this.saveConfig();
+            }
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    private void saveConfig() {
+        if (yamlConfig == null) {
+            return;
+        }
+        yamlConfig.saveFile();
+    }
+
     public FileConfiguration getConfig() {
         // Если файл YAML не пустой, то возвращаем его
         if (yamlConfig != null) {
@@ -77,15 +98,15 @@ public class RulesConfig {
     }
 
     public List<String> getMascBlocks() {
-        return this.getConfig().getStringList("blockmasks");
+        return this.getConfig().getStringList("mask");
     }
 
     public List<String> getBlocks() {
-        return this.getConfig().getStringList("blockexact");
+        return this.getConfig().getStringList("exact");
     }
 
     public List<String> getWoods() {
-        return this.getConfig().getStringList("wooden");
+        return this.getConfig().getStringList("wood");
     }
 
     public List<String> getStones() {

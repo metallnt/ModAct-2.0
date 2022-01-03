@@ -31,7 +31,7 @@ public class YamlConfig extends YamlConfiguration {
      */
     public YamlConfig(final ModAct modAct, final String fileName, final String name) throws InvalidConfigurationException {
 
-        // ринимает null как configDefaults -> проверяет наличие ресурса и копирует его, если найден,
+        // Принимает null как configDefaults -> проверяет наличие ресурса и копирует его, если найден,
         // делает пустой конфиг, если ничего не найдено.
          
         final String folderPath = modAct.getDataFolder().getAbsolutePath() + File.separator;

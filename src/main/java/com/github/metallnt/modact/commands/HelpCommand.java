@@ -70,7 +70,7 @@ public class HelpCommand extends ModActCommand {
             end = start + 6;
         }
 
-        sender.sendMessage(ChatColor.GREEN + "-- Autorank Commands --");
+        sender.sendMessage(ChatColor.GREEN + "-- ModAct команды --");
 
         for (int i = start; i < end; i++) {
             // Can't go any further

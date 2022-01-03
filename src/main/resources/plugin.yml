@@ -9,11 +9,9 @@ softdepend:
 commands:
   modact:
     description: Главная команда плагина ModAct
-    usage: ModAct отключен. Проверьте server.log
+    usage: Введите "/mac help" для справки по командам
     aliases: [ mac ]
 permissions:
-  modact:
-    default: op
   modact.help:
     default: op
     description: Справка по командам
@@ -26,3 +24,6 @@ permissions:
   modact.delete:
     default: op
     description: Удаление блока из одного из списков
+  modact.notification:
+    default: true
+    description: Отключение оповещений о правилах мира

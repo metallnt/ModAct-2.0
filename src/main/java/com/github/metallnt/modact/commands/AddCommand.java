@@ -6,6 +6,9 @@ import com.github.metallnt.modact.permissions.ModActPermission;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class com.github.metallnt.modact.commands.manager
  * Обработчик /modact add
@@ -25,7 +28,23 @@ public class AddCommand extends ModActCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        return false;
+
+        if (args.length < 3) {
+            sender.sendMessage(getUsage());
+            return true;
+        }
+        List<String> ids = new ArrayList<>();
+        for (int i = 2; args[i].isEmpty(); i++) ids.add(args[i]);
+        if (plugin.getRulesConfig().addData(args[0], ids)) {
+            sender.sendMessage("В список " + args[1] + " успешно добавлены предметы: " + ids);
+        }
+
+        return true;
+    }
+
+    private void addValue(String arg) {
+
+
     }
 
     @Override

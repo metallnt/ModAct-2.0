@@ -48,7 +48,7 @@ public class CommandsManager implements TabExecutor {
         registeredCommands.put(Collections.singletonList("help"), new HelpCommand(plugin));
         registeredCommands.put(Collections.singletonList("reload"), new ReloadCommand(plugin));
         registeredCommands.put(Collections.singletonList("add"), new AddCommand(plugin));
-        registeredCommands.put(Collections.singletonList("delete"), new DeleteCommand(plugin));
+        registeredCommands.put(Arrays.asList("delete", "remove", "del", "rem"), new DeleteCommand(plugin));
     }
 
     // Получить хэш-карту используемых команд
