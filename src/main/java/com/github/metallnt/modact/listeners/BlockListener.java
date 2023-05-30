@@ -47,7 +47,7 @@ public class BlockListener implements Listener {
         debug("BlockBreakEvent");
         if (perm.permissionDenied(e.getPlayer(), ModActPermission.BLOCK_DESTROY, e.getBlock())) {
             debug("Игроку " + e.getPlayer() + " нельзя сломать блок " + blockName);
-            message.onActionBar(e.getPlayer(), "Вы не можете сломать блок: " + blockName);
+            message.onActionBar(e.getPlayer(), "Вы не можете сломать блок: " + blockName + "(" + ModActPermission.BLOCK_DESTROY + ")");
             e.setCancelled(true);
         }
     }
@@ -58,7 +58,7 @@ public class BlockListener implements Listener {
         debug("BlockPlaceEvent");
         if (perm.permissionDenied(e.getPlayer(), ModActPermission.BLOCK_PLACE, blockName)) {
             debug("Игроку " + e.getPlayer() + " нельзя поставить блок " + blockName);
-            message.onActionBar(e.getPlayer(), "Вы не можете установить: " + blockName);
+            message.onActionBar(e.getPlayer(), "Вы не можете установить: " + blockName + "(" + ModActPermission.BLOCK_PLACE + ")");
             e.setCancelled(true);
         }
     }
@@ -74,7 +74,7 @@ public class BlockListener implements Listener {
             assert player != null;
             if (perm.permissionDenied(player, ModActPermission.BLOCK_DESTROY, blockName)) {
                 debug("Игроку " + player + " нельзя сломать " + blockName);
-                message.onActionBar(player, "Вы не можете сломать блок: " + blockName);
+                message.onActionBar(player, "Вы не можете сломать блок: " + blockName + "(" + ModActPermission.BLOCK_DESTROY + ")");
                 e.setCancelled(true);
             }
         }
@@ -87,7 +87,7 @@ public class BlockListener implements Listener {
         debug("HangingPlaceEvent");
         if (perm.permissionDenied(Objects.requireNonNull(e.getPlayer()), ModActPermission.BLOCK_PLACE, blockName)) {
             debug("Игроку " + e.getPlayer() + " нельзя поставить блок " + blockName);
-            message.onActionBar(e.getPlayer(), "Вы не можете установить: " + blockName);
+            message.onActionBar(e.getPlayer(), "Вы не можете установить: " + blockName + "(" + ModActPermission.BLOCK_PLACE + ")");
             e.setCancelled(true);
         }
     }
