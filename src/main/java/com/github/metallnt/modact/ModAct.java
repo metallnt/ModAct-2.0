@@ -6,18 +6,19 @@ import com.github.metallnt.modact.configs.RulesConfig;
 import com.github.metallnt.modact.listeners.BlockListener;
 import com.github.metallnt.modact.listeners.PlayerListener;
 import com.github.metallnt.modact.managers.MessageManager;
-import com.github.metallnt.modact.permissions.PermCheck;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ModAct extends JavaPlugin {
 
     private static ModAct plugin;
 
-    private DefaultConfig defaultConfig;
-    private RulesConfig rulesConfig;
-    private PermCheck permCheck;
-    private MessageManager messageManager;
-    private CommandsManager commandsManager;
+    private DefaultConfig defaultConfig;                    // Конфиг
+    private RulesConfig rulesConfig;                        // Правила
+    //    private PermCheck permCheck;
+    private MessageManager messageManager;                  // Обработчик сообщений
+    private CommandsManager commandsManager;                // Обработчик команд
+//    private LuckPerms apiLp;
+//    private static Permission perm = null;
 
     public static ModAct getInstance() {
         return plugin;
@@ -27,20 +28,34 @@ public final class ModAct extends JavaPlugin {
     public void onEnable() {
         plugin = this;
 
-        // Регистрируем конфиг
+        // Регистрируем конфиг и правила
         setDefaultConfig(new DefaultConfig(this));
         setRulesConfig(new RulesConfig(this));
 
+        // Регистрируем обработчики
         setMessageManager(new MessageManager(this));
-        setPermCheck(new PermCheck(this));
+//        setPermCheck(new PermCheck(this));
+//        setPermission();
         setCommandsManager(new CommandsManager(this));
+
         // Загружаем конфиги
         SetDataFiles();
 
         // Listeners
         getServer().getPluginManager().registerEvents(new BlockListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+
+        // LuckPerms
+//        setApiLp();
+
     }
+
+//    private boolean setPermission() {
+//        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+//        assert rsp != null;
+//        perm = rsp.getProvider();
+//        return true;
+//    }
 
     /**
      * Конфиг-файлы. Установка + обновление
@@ -79,13 +94,27 @@ public final class ModAct extends JavaPlugin {
         this.rulesConfig = rulesConfig;
     }
 
-    public PermCheck getPermCheck() {
-        return permCheck;
-    }
+//    public PermCheck getPermCheck() {
+//        return permCheck;
+//    }
 
-    public void setPermCheck(PermCheck permCheck) {
-        this.permCheck = permCheck;
-    }
+//    public void setApiLp() {
+//        RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+//        if (provider != null) {
+//            this.apiLp = provider.getProvider();
+//        } else {
+//            this.apiLp = LuckPermsProvider.get();
+//        }
+//    }
+
+//    public LuckPerms getApiLp() {return apiLp;}
+
+//    public Permission getPermission() {
+//        return perm;
+//    }
+//    public void setPermCheck(PermCheck permCheck) {
+//        this.permCheck = permCheck;
+//    }
 
     public MessageManager getMessageManager() {
         return messageManager;

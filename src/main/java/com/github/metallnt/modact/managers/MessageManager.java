@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 /**
  * Class com.github.metallnt.modact.managers
- * <p>
+ * Сообщения пользователю
  * Date: 27.12.2021 12:47 27 12 2021
  *
  * @author Metall

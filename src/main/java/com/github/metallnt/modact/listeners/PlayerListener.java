@@ -4,8 +4,6 @@ import com.github.metallnt.modact.ModAct;
 import com.github.metallnt.modact.configs.DefaultConfig;
 import com.github.metallnt.modact.configs.RulesConfig;
 import com.github.metallnt.modact.managers.MessageManager;
-import com.github.metallnt.modact.permissions.ModActPermission;
-import com.github.metallnt.modact.permissions.PermCheck;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Damageable;
@@ -14,7 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -23,6 +20,7 @@ import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 /**
  * Class com.github.metallnt.modact.listeners
@@ -33,8 +31,10 @@ import java.util.Objects;
  */
 public class PlayerListener implements Listener {
 
+    private final Logger log;
     private final DefaultConfig config;
-    private final PermCheck perm;
+    private final RulesConfig rules;
+    //    private final PermCheck perm;
     private final MessageManager msg;
     // List tools
     private final List<String> blocksMask;
@@ -46,14 +46,18 @@ public class PlayerListener implements Listener {
     private final List<String> goldBlocks;
     private final List<String> diamondBlocks;
     private final List<String> netherBlocks;
+    private final List<String> itemUse;
+    private final List<String> blockUse;
+    private final List<String> blockDestroys;
     // Other var
     private Player player;
 
     public PlayerListener(ModAct modAct) {
-        perm = modAct.getPermCheck();
+//        perm = modAct.getPermCheck();
+        log = modAct.getLogger();
         config = modAct.getDefaultConfig();
         msg = modAct.getMessageManager();
-        RulesConfig rules = modAct.getRulesConfig();
+        rules = modAct.getRulesConfig();
         blocksMask = rules.getMascBlocks();
         modAct.getLogger().info(blocksMask.toString());
         blocksExact = rules.getBlocks();
@@ -64,6 +68,9 @@ public class PlayerListener implements Listener {
         goldBlocks = rules.getGolds();
         diamondBlocks = rules.getDiamonds();
         netherBlocks = rules.getNethers();
+        itemUse = rules.getItemBlockUse();
+        blockUse = rules.getBlockUse();
+        blockDestroys = rules.getBlockDestroy();
     }
 
     /**
@@ -74,15 +81,22 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractEntity(PlayerInteractEntityEvent e) {
         if (config.getItemUse()) {
-            if (perm.permissionDenied(e.getPlayer(),
-                    ModActPermission.ITEM_USE,
-                    e.getPlayer().getInventory().getItemInMainHand(),
-                    e.getRightClicked())) {
+            if (itemUse.contains(e.getPlayer().getInventory().getItemInMainHand().getType().name())) {
                 msg.onActionBar(e.getPlayer(), "Вы не можете использовать "
                         + e.getPlayer().getInventory().getItemInMainHand().getType().name()
                         + " на " + e.getRightClicked().getName());
                 e.setCancelled(true);
+
             }
+//            if (perm.permissionDenied(e.getPlayer(),
+//                    ModActPermission.ITEM_USE,
+//                    e.getPlayer().getInventory().getItemInMainHand(),
+//                    e.getRightClicked())) {
+//                msg.onActionBar(e.getPlayer(), "Вы не можете использовать "
+//                        + e.getPlayer().getInventory().getItemInMainHand().getType().name()
+//                        + " на " + e.getRightClicked().getName());
+//                e.setCancelled(true);
+//            }
         }
     }
 
@@ -133,14 +147,20 @@ public class PlayerListener implements Listener {
             e.setCancelled(true);
             return;
         }
+        // Отсечка использования ПКМ
+        if (click.isRightClick()) {
+            msg.onActionBar(player, "Вы можете крафтить только левой кнопкой мышки");
+            e.setCancelled(true);
+            return;
+        }
         // Проверка прав на крафт
         if (click.isLeftClick()) {
             // Отсекаем, если нет профессии
-            if (perm.permissionDenied(player, ModActPermission.ITEM_CRAFT, e.getRecipe().getResult())) {
-                msg.onActionBar(player, "Вы несможете скрафтить " + e.getRecipe().getResult().getType().name() + " не имея нужной профессии");
-                e.setCancelled(true);
-                return;
-            }
+//            if (perm.permissionDenied(player, ModActPermission.ITEM_CRAFT, e.getRecipe().getResult())) {
+//                msg.onActionBar(player, "Вы несможете скрафтить " + e.getRecipe().getResult().getType().name() + " не имея нужной профессии");
+//                e.setCancelled(true);
+//                return;
+//            }
             if (expLvl < 1) {
 //            if (expLvl - e.getRecipe().getResult().getAmount() < 0) {
                 msg.onActionBar(player, "У вас не хватает опыта для этого крафта");
@@ -163,13 +183,13 @@ public class PlayerListener implements Listener {
      *
      * @param e Event
      */
-    @EventHandler(priority = EventPriority.LOW)
-    public void onItemEnchant(EnchantItemEvent e) {
-        if (perm.permissionDenied(e.getEnchanter(), ModActPermission.ITEM_ENCHANT, e.getItem())) {
-            msg.onActionBar(player, "Вы не можете зачаровать " + e.getItem().getType().name());
-            e.setCancelled(true);
-        }
-    }
+//    @EventHandler(priority = EventPriority.LOW)
+//    public void onItemEnchant(EnchantItemEvent e) {
+//        if (perm.permissionDenied(e.getEnchanter(), ModActPermission.ITEM_ENCHANT, e.getItem())) {
+//            msg.onActionBar(player, "Вы не можете зачаровать " + e.getItem().getType().name());
+//            e.setCancelled(true);
+//        }
+//    }
 
     /**
      * Проверка правого клика по правам, отмена
@@ -179,7 +199,7 @@ public class PlayerListener implements Listener {
      * @param block  Block
      */
     private void checkRightClickBlock(PlayerInteractEvent e, Player player, Block block) {
-        if (perm.permissionDenied(player, ModActPermission.BLOCK_USE, block.getType())) {
+        if (blockUse.contains(block.getType().name())) {
             msg.onActionBar(player, "Вы не можете использовать " + block.getType().name());
             e.setCancelled(true);
         }
@@ -194,19 +214,27 @@ public class PlayerListener implements Listener {
      */
     private void checkLeftClickBlock(PlayerInteractEvent e, Player player, Block block) {
         String targetBlock = block.getType().name().toLowerCase().replace("_", "");
+//        boolean can = false;
         // Проверка блоков по маске
+        debug(blocksMask.toString());
         for (String blockMask : blocksMask) {
+            debug(blockMask + " ?= " + targetBlock);
             if (targetBlock.contains(blockMask)) {
+                debug("Сработала маска");
                 return;
             }
         }
         // Проверка блоков по точному значению
+        debug(blocksExact.toString());
         for (String blockExact : blocksExact) {
+            debug(blockExact + " ?= " + targetBlock);
             if (targetBlock.equals(blockExact)) {
+                debug("Сработало точное значение");
                 return;
             }
         }
         // Проверка на инструмент
+        debug(tools.toString());
         String inHandItem = player.getInventory().getItemInMainHand().getType().toString().toLowerCase().replace("_", "");
         for (String tool : tools) {
             if (tool.equals(inHandItem)) {
@@ -215,17 +243,25 @@ public class PlayerListener implements Listener {
                 return;
             }
         }
+
+
         // Далее с любой рукой
-        // Проверка прав на случай неучтеного
-        if (perm.permissionDenied(player, ModActPermission.ITEM_LEFT, player.getInventory().getItemInMainHand().getType(), block.getType())) {
-            String text;
-            if (player.getInventory().getItemInMainHand().getType().name().equals("AIR")) {
-                text = "Вы не можете сломать " + block.getType().name() + " рукой ";
-            } else {
-                text = "Вы не можете сломать " + block.getType().name() + " используя " + player.getInventory().getItemInMainHand().getType().name();
-            }
-            msg.onActionBar(player, text);
-            e.setCancelled(true);
+        // Проверка прав на случай неучтенного
+        String text;
+        if (player.getInventory().getItemInMainHand().getType().name().equals("AIR")) {
+            text = "Вы не можете сломать " + block.getType().name() + " рукой ";
+        } else {
+            text = "Вы не можете сломать " + block.getType().name() + " используя " + player.getInventory().getItemInMainHand().getType().name();
+        }
+        msg.onActionBar(player, text);
+        e.setCancelled(true);
+
+
+    }
+
+    private void debug(String message) {
+        if (config.getDebug()) {
+            log.info(message);
         }
     }
 

@@ -98,11 +98,11 @@ public class RulesConfig {
     }
 
     public List<String> getMascBlocks() {
-        return this.getConfig().getStringList("mask");
+        return this.getConfig().getStringList("blockmasks");
     }
 
     public List<String> getBlocks() {
-        return this.getConfig().getStringList("exact");
+        return this.getConfig().getStringList("blockexact");
     }
 
     public List<String> getWoods() {
@@ -127,5 +127,21 @@ public class RulesConfig {
 
     public List<String> getNethers() {
         return this.getConfig().getStringList("nether");
+    }
+
+    public List<String> getItemBlockUse() {
+        return this.getConfig().getStringList("itemuse");
+    }
+
+    public List<String> getBlockUse() {
+        return this.getConfig().getStringList("blockuse");
+    }
+
+    public List<String> getBlockDestroy() {
+        return this.getConfig().getStringList("blockdestroy");
+    }
+
+    public List<String> getBlockPlace() {
+        return this.getConfig().getStringList("blockplace");
     }
 }

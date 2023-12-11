@@ -287,3 +287,58 @@ gold:
 diamond:
   - netheriteblock
 nether: []
+# List ID items blocked for use (- modact.item.use.<item>)
+itemuse: [ ]
+# List ID blocks for use (- modact.block.use.<block>)
+blockuse: [ ]
+# List ID blocks for destroy (- modact.block.destroy.<block>)
+blockdestroy:
+  - activatorrail
+  - beacon
+  - conduit
+  - brewingstand
+  - cauldron
+  - brownbed
+  - greenbed
+  - redbed
+  - blackbed
+  - loom
+  - composter
+  - smoker
+  - observer
+  - repeater
+  - comparator
+  - lectern
+  - poweredrail
+  - detectorrail
+  - rail
+  - blastfurnace
+  - cartographytable
+  - fletchingtable
+  - grindstone
+  - smithingtable
+  - stonecutter
+  - dispenser
+  - stickypiston
+  - piston
+  - daylightdetector
+  - hopper
+  - dropper
+  - craftingtable
+  - furnace
+  - enchantingtable
+  - anvil
+  - whitebed
+  - orangebed
+  - magentabed
+  - lightbluebed
+  - yellowbed
+  - limebed
+  - pinkbed
+  - graybed
+  - lightgraybed
+  - cyanbed
+  - purpurebed
+  - bluebed
+# List ID blocks for place (- modact.block.place.<block>)
+blockplace: [ ]
