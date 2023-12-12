@@ -2,9 +2,11 @@ package com.github.metallnt.modact.listeners;
 
 import com.github.metallnt.modact.ModAct;
 import com.github.metallnt.modact.configs.DefaultConfig;
+import com.github.metallnt.modact.configs.PlayerConfig;
 import com.github.metallnt.modact.configs.RulesConfig;
 import com.github.metallnt.modact.managers.MessageManager;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
@@ -20,6 +22,7 @@ import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.SplittableRandom;
 import java.util.logging.Logger;
 
 /**
@@ -34,6 +37,7 @@ public class PlayerListener implements Listener {
     private final Logger log;
     private final DefaultConfig config;
     private final RulesConfig rules;
+    private final PlayerConfig playerConfig;
     //    private final PermCheck perm;
     private final MessageManager msg;
     // List tools
@@ -58,6 +62,7 @@ public class PlayerListener implements Listener {
         config = modAct.getDefaultConfig();
         msg = modAct.getMessageManager();
         rules = modAct.getRulesConfig();
+        playerConfig = modAct.getPlayerConfig();
         blocksMask = rules.getMascBlocks();
         modAct.getLogger().info(blocksMask.toString());
         blocksExact = rules.getBlocks();
@@ -171,8 +176,24 @@ public class PlayerListener implements Listener {
 //            expLvl = expLvl - e.getRecipe().getResult().getAmount();
                 expLvl = expLvl - 1;
                 player.setLevel(expLvl);
+                randomChange(Objects.requireNonNull(player.getPlayer()).getName(), e);
             }
         }
+    }
+
+    private void randomChange(String username, CraftItemEvent e) {
+        String itemName = e.getRecipe().getResult().getType().name();
+        int chance = playerConfig.getUserData(username, itemName);
+        SplittableRandom random = new SplittableRandom();
+        if (random.nextInt(1, 101) <= chance) {
+            playerConfig.setUserData(username, itemName, chance + 5);
+        } else {
+            playerConfig.setUserData(username, itemName, chance + 1);
+            player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_DESTROY, 1f, 1f);
+            // ТУУУУУУУУУУУУУУУУУУУУУТТТТТ
+            e.getInventory().setResult(null);
+        }
+
     }
 
     // Чарование на столе зачарования

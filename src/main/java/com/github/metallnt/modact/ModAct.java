@@ -2,6 +2,7 @@ package com.github.metallnt.modact;
 
 import com.github.metallnt.modact.commands.manager.CommandsManager;
 import com.github.metallnt.modact.configs.DefaultConfig;
+import com.github.metallnt.modact.configs.PlayerConfig;
 import com.github.metallnt.modact.configs.RulesConfig;
 import com.github.metallnt.modact.listeners.BlockListener;
 import com.github.metallnt.modact.listeners.PlayerListener;
@@ -14,6 +15,7 @@ public final class ModAct extends JavaPlugin {
 
     private DefaultConfig defaultConfig;                    // Конфиг
     private RulesConfig rulesConfig;                        // Правила
+    private PlayerConfig playerConfig;                      // Данные по игрокам и шансам
     //    private PermCheck permCheck;
     private MessageManager messageManager;                  // Обработчик сообщений
     private CommandsManager commandsManager;                // Обработчик команд
@@ -31,6 +33,7 @@ public final class ModAct extends JavaPlugin {
         // Регистрируем конфиг и правила
         setDefaultConfig(new DefaultConfig(this));
         setRulesConfig(new RulesConfig(this));
+        setPlayerConfig(new PlayerConfig(this));
 
         // Регистрируем обработчики
         setMessageManager(new MessageManager(this));
@@ -92,6 +95,14 @@ public final class ModAct extends JavaPlugin {
 
     public void setRulesConfig(RulesConfig rulesConfig) {
         this.rulesConfig = rulesConfig;
+    }
+
+    public PlayerConfig getPlayerConfig() {
+        return playerConfig;
+    }
+
+    public void setPlayerConfig(PlayerConfig playerConfig) {
+        this.playerConfig = playerConfig;
     }
 
 //    public PermCheck getPermCheck() {
