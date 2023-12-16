@@ -5,6 +5,7 @@ import com.github.metallnt.modact.configs.DefaultConfig;
 import com.github.metallnt.modact.configs.PlayerConfig;
 import com.github.metallnt.modact.configs.RulesConfig;
 import com.github.metallnt.modact.listeners.BlockListener;
+import com.github.metallnt.modact.listeners.InventoryListener;
 import com.github.metallnt.modact.listeners.PlayerListener;
 import com.github.metallnt.modact.managers.MessageManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -47,6 +48,7 @@ public final class ModAct extends JavaPlugin {
         // Listeners
         getServer().getPluginManager().registerEvents(new BlockListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+        getServer().getPluginManager().registerEvents(new InventoryListener(this), this);
 
         // LuckPerms
 //        setApiLp();
@@ -75,12 +77,18 @@ public final class ModAct extends JavaPlugin {
         } else {
             getLogger().info("Rules loaded!");
         }
+        if (!this.getPlayerConfig().loadConfig()) {
+            getLogger().info("UserData не загружен");
+        } else {
+            getLogger().info("UserData loaded!");
+        }
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
     }
+
     public DefaultConfig getDefaultConfig() {
         return defaultConfig;
     }

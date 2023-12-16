@@ -6,7 +6,6 @@ import com.github.metallnt.modact.configs.PlayerConfig;
 import com.github.metallnt.modact.configs.RulesConfig;
 import com.github.metallnt.modact.managers.MessageManager;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
@@ -14,15 +13,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.SplittableRandom;
 import java.util.logging.Logger;
 
 /**
@@ -58,24 +54,24 @@ public class PlayerListener implements Listener {
 
     public PlayerListener(ModAct modAct) {
 //        perm = modAct.getPermCheck();
-        log = modAct.getLogger();
-        config = modAct.getDefaultConfig();
-        msg = modAct.getMessageManager();
-        rules = modAct.getRulesConfig();
-        playerConfig = modAct.getPlayerConfig();
-        blocksMask = rules.getMascBlocks();
-        modAct.getLogger().info(blocksMask.toString());
-        blocksExact = rules.getBlocks();
-        woodBlocks = rules.getWoods();
-        tools = rules.getTools();
-        stoneBlocks = rules.getStones();
-        ironBlocks = rules.getIrons();
-        goldBlocks = rules.getGolds();
-        diamondBlocks = rules.getDiamonds();
-        netherBlocks = rules.getNethers();
-        itemUse = rules.getItemBlockUse();
-        blockUse = rules.getBlockUse();
-        blockDestroys = rules.getBlockDestroy();
+        log = modAct.getLogger();                   // Логгер
+        config = modAct.getDefaultConfig();         // Конфигурация
+        msg = modAct.getMessageManager();           // Сообщение игроку
+        rules = modAct.getRulesConfig();            // Правила по блокам
+        playerConfig = modAct.getPlayerConfig();    // Данные игроков по крафту
+        blocksMask = rules.getMascBlocks();         // Список масок блоков
+//        modAct.getLogger().info(blocksMask.toString());
+        blocksExact = rules.getBlocks();            // Список точных ID блоков
+        woodBlocks = rules.getWoods();              // Настройки для деревянных инстр
+        tools = rules.getTools();                   // Список инструментов
+        stoneBlocks = rules.getStones();            // Для каменных инстр
+        ironBlocks = rules.getIrons();              // Для железных инстр
+        goldBlocks = rules.getGolds();              // Для золотых
+        diamondBlocks = rules.getDiamonds();        // Для алмазных
+        netherBlocks = rules.getNethers();          // Для незеритовых
+        itemUse = rules.getItemBlockUse();          // Предметы запрещенные для использования
+        blockUse = rules.getBlockUse();             // Запрещенные блоки для использования
+        blockDestroys = rules.getBlockDestroy();    // Запрещенные блоки для разрушения
     }
 
     /**
@@ -91,17 +87,7 @@ public class PlayerListener implements Listener {
                         + e.getPlayer().getInventory().getItemInMainHand().getType().name()
                         + " на " + e.getRightClicked().getName());
                 e.setCancelled(true);
-
             }
-//            if (perm.permissionDenied(e.getPlayer(),
-//                    ModActPermission.ITEM_USE,
-//                    e.getPlayer().getInventory().getItemInMainHand(),
-//                    e.getRightClicked())) {
-//                msg.onActionBar(e.getPlayer(), "Вы не можете использовать "
-//                        + e.getPlayer().getInventory().getItemInMainHand().getType().name()
-//                        + " на " + e.getRightClicked().getName());
-//                e.setCancelled(true);
-//            }
         }
     }
 
@@ -136,65 +122,8 @@ public class PlayerListener implements Listener {
         }
     }
 
-    /**
-     * Слушатель крафта
-     *
-     * @param e Event
-     */
-    @EventHandler(priority = EventPriority.LOW)
-    public void onItemCraft(CraftItemEvent e) {
-        player = (Player) e.getWhoClicked();
-        ClickType click = e.getClick();
-        int expLvl = player.getLevel();
-        // Отсечка использования ШИФТ+КЛИК
-        if (click.isShiftClick()) {
-            msg.onActionBar(player, "Вы не можете крафтить по несколько предметов одновременно");
-            e.setCancelled(true);
-            return;
-        }
-        // Отсечка использования ПКМ
-        if (click.isRightClick()) {
-            msg.onActionBar(player, "Вы можете крафтить только левой кнопкой мышки");
-            e.setCancelled(true);
-            return;
-        }
-        // Проверка прав на крафт
-        if (click.isLeftClick()) {
-            // Отсекаем, если нет профессии
-//            if (perm.permissionDenied(player, ModActPermission.ITEM_CRAFT, e.getRecipe().getResult())) {
-//                msg.onActionBar(player, "Вы несможете скрафтить " + e.getRecipe().getResult().getType().name() + " не имея нужной профессии");
-//                e.setCancelled(true);
-//                return;
-//            }
-            if (expLvl < 1) {
-//            if (expLvl - e.getRecipe().getResult().getAmount() < 0) {
-                msg.onActionBar(player, "У вас не хватает опыта для этого крафта");
-                e.setCancelled(true);
-                return;
-            }
-            if (Objects.requireNonNull(e.getCursor()).getAmount() + e.getRecipe().getResult().getAmount() < e.getRecipe().getResult().getMaxStackSize()) {
-//            expLvl = expLvl - e.getRecipe().getResult().getAmount();
-                expLvl = expLvl - 1;
-                player.setLevel(expLvl);
-                randomChange(Objects.requireNonNull(player.getPlayer()).getName(), e);
-            }
-        }
-    }
 
-    private void randomChange(String username, CraftItemEvent e) {
-        String itemName = e.getRecipe().getResult().getType().name();
-        int chance = playerConfig.getUserData(username, itemName);
-        SplittableRandom random = new SplittableRandom();
-        if (random.nextInt(1, 101) <= chance) {
-            playerConfig.setUserData(username, itemName, chance + 5);
-        } else {
-            playerConfig.setUserData(username, itemName, chance + 1);
-            player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_DESTROY, 1f, 1f);
-            // ТУУУУУУУУУУУУУУУУУУУУУТТТТТ
-            e.getInventory().setResult(null);
-        }
 
-    }
 
     // Чарование на столе зачарования
     // Кажется тут нужно все переделать на клик по ячейке стола зачарования
@@ -237,28 +166,25 @@ public class PlayerListener implements Listener {
         String targetBlock = block.getType().name().toLowerCase().replace("_", "");
 //        boolean can = false;
         // Проверка блоков по маске
-        debug(blocksMask.toString());
         for (String blockMask : blocksMask) {
-            debug(blockMask + " ?= " + targetBlock);
             if (targetBlock.contains(blockMask)) {
-                debug("Сработала маска");
+                debug("Сработала маска: " + blockMask + " == " + targetBlock);
                 return;
             }
         }
         // Проверка блоков по точному значению
         debug(blocksExact.toString());
         for (String blockExact : blocksExact) {
-            debug(blockExact + " ?= " + targetBlock);
             if (targetBlock.equals(blockExact)) {
-                debug("Сработало точное значение");
+                debug("Сработало точное значение: " + blockExact + " == " + targetBlock);
                 return;
             }
         }
         // Проверка на инструмент
-        debug(tools.toString());
         String inHandItem = player.getInventory().getItemInMainHand().getType().toString().toLowerCase().replace("_", "");
         for (String tool : tools) {
             if (tool.equals(inHandItem)) {
+                debug(tool);
                 // GOTO Проверка запрета инструмента
                 checkToolPerm(e, tool, block);
                 return;
