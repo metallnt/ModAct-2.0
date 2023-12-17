@@ -1,7 +1,7 @@
 name: ModAct
 version: '${project.version}'
 main: com.github.metallnt.modact.ModAct
-api-version: 1.16
+api-version: 1.19
 description: 'Пример реализации конфига'
 author: Metall
 softdepend:
@@ -9,8 +9,9 @@ softdepend:
 commands:
   modact:
     description: Главная команда плагина ModAct
-    usage: Введите "/mac help" для справки по командам
-    aliases: [ mac ]
+    usage: /[modact,mac] help|reload|addexact|delexact|addmask|delmask|addblockdestroy|delblockdestroy|debug
+    aliases:
+      - mac
 permissions:
   modact.help:
     default: op
