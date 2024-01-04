@@ -117,7 +117,9 @@ blockmasks:
 # List ID free blocks
 blockexact:
   - sand
+  - redsand
   - sweetberrybush
+  - podzol
 # List ID freezed blocks for tools
 wooden:
   - netherbrickslab
@@ -295,21 +297,21 @@ blockuse: [ ]
 blockdestroy:
   - activatorrail
   - beacon
-  - conduit
-  - brewingstand
-  - cauldron
-  - brownbed
-  - greenbed
-  - redbed
   - blackbed
-  - loom
-  - composter
-  - smoker
-  - observer
-  - repeater
+  - brewingstand
+  - brownbed
+  - cauldron
+  - conduit
   - comparator
+  - composter
+  - greenbed
   - lectern
+  - loom
+  - observer
   - poweredrail
+  - redbed
+  - repeater
+  - smoker
   - detectorrail
   - rail
   - blastfurnace
@@ -340,5 +342,6 @@ blockdestroy:
   - cyanbed
   - purpurebed
   - bluebed
+  - watercauldron
 # List ID blocks for place (- modact.block.place.<block>)
 blockplace: [ ]

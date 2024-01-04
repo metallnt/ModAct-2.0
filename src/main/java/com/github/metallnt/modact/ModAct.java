@@ -1,6 +1,6 @@
 package com.github.metallnt.modact;
 
-import com.github.metallnt.modact.commands.manager.CommandsManager;
+//import com.github.metallnt.modact.commands.manager.CommandsManager;
 import com.github.metallnt.modact.configs.DefaultConfig;
 import com.github.metallnt.modact.configs.PlayerConfig;
 import com.github.metallnt.modact.configs.RulesConfig;
@@ -19,7 +19,7 @@ public final class ModAct extends JavaPlugin {
     private PlayerConfig playerConfig;                      // Данные по игрокам и шансам
     //    private PermCheck permCheck;
     private MessageManager messageManager;                  // Обработчик сообщений
-    private CommandsManager commandsManager;                // Обработчик команд
+//    private CommandsManager commandsManager;                // Обработчик команд
 //    private LuckPerms apiLp;
 //    private static Permission perm = null;
 
@@ -40,7 +40,7 @@ public final class ModAct extends JavaPlugin {
         setMessageManager(new MessageManager(this));
 //        setPermCheck(new PermCheck(this));
 //        setPermission();
-        setCommandsManager(new CommandsManager(this));
+//        setCommandsManager(new CommandsManager(this));
 
         // Загружаем конфиги
         SetDataFiles();
@@ -143,11 +143,11 @@ public final class ModAct extends JavaPlugin {
         this.messageManager = messageManager;
     }
 
-    public CommandsManager getCommandsManager() {
-        return commandsManager;
-    }
+//    public CommandsManager getCommandsManager() {
+//        return commandsManager;
+//    }
 
-    public void setCommandsManager(CommandsManager commandsManager) {
-        this.commandsManager = commandsManager;
-    }
+//    public void setCommandsManager(CommandsManager commandsManager) {
+//        this.commandsManager = commandsManager;
+//    }
 }
